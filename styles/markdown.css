@@ -1,0 +1,111 @@
+.markdown {
+  color: var(--ink);
+  font-size: 1.05rem;
+  line-height: 1.8;
+}
+
+.markdown > :first-child {
+  margin-top: 0;
+}
+
+.markdown > :last-child {
+  margin-bottom: 0;
+}
+
+.markdown h2,
+.markdown h3,
+.markdown h4 {
+  margin-top: 2.3em;
+  margin-bottom: 0.8em;
+  color: var(--ink);
+  scroll-margin-top: 6rem;
+}
+
+.markdown h2 {
+  font-size: 1.95rem;
+  line-height: 1.25;
+}
+
+.markdown h3 {
+  font-size: 1.45rem;
+  line-height: 1.3;
+}
+
+.markdown p,
+.markdown ul,
+.markdown ol,
+.markdown blockquote,
+.markdown pre {
+  margin-top: 1.1em;
+  margin-bottom: 1.1em;
+}
+
+.markdown ul,
+.markdown ol {
+  padding-left: 1.3rem;
+}
+
+.markdown li {
+  margin: 0.35em 0;
+}
+
+.markdown a {
+  color: var(--accent);
+  text-underline-offset: 0.2em;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+}
+
+.markdown blockquote {
+  border-left: 3px solid var(--accent);
+  margin-left: 0;
+  padding: 0.3rem 0 0.3rem 1rem;
+  color: var(--muted);
+}
+
+.markdown :not(pre) > code {
+  border-radius: 0.5rem;
+  border: 1px solid var(--border);
+  background: #f3f4f8;
+  font-size: 0.9em;
+  padding: 0.15rem 0.35rem;
+}
+
+.markdown pre {
+  border-radius: 0.95rem;
+  background: #111827;
+  color: #e6edf3;
+  overflow-x: auto;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.markdown pre code {
+  display: block;
+  padding: 1rem 1.1rem;
+  font-size: 0.9rem;
+}
+
+.markdown img {
+  border-radius: 1rem;
+  border: 1px solid var(--border);
+}
+
+.markdown hr {
+  margin: 2.3rem 0;
+  border: none;
+  border-top: 1px solid var(--border);
+}
+
+.markdown .anchor {
+  margin-left: 0.4rem;
+  opacity: 0;
+  color: var(--muted);
+  transition: opacity 180ms ease;
+}
+
+.markdown h2:hover .anchor,
+.markdown h3:hover .anchor,
+.markdown h4:hover .anchor {
+  opacity: 1;
+}
+
