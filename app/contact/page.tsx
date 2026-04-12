@@ -6,12 +6,12 @@ import { profile } from "@/data/profile";
 import { isExternalUrl } from "@/lib/utils";
 
 export const metadata: Metadata = {
-  title: "Contact",
-  description: "Ways to get in touch.",
+  title: "联系",
+  description: "联系方式与社交主页。",
 };
 
 const contactLinks = [
-  { label: "Email", href: `mailto:${profile.email}` },
+  { label: "邮箱", href: `mailto:${profile.email}` },
   { label: "GitHub", href: profile.social.github },
   { label: "X / Twitter", href: profile.social.twitter },
   { label: "LinkedIn", href: profile.social.linkedin },
@@ -22,15 +22,15 @@ export default function ContactPage() {
     <>
       <PageHero
         eyebrow="Contact"
-        title="Get in touch"
-        description="If your message is thoughtful, practical, or collaborative, I am happy to connect."
+        title="联系我"
+        description="欢迎交流读书、写作、网站搭建与长期主义实践。"
       />
       <section className="section-space pt-4">
         <Container>
           <div className="surface-card max-w-3xl p-7">
             <ul className="space-y-5">
               {contactLinks.map((item) => (
-                <li key={item.label} className="flex flex-wrap items-center justify-between gap-3 border-b border-[var(--border)] pb-5">
+                <li key={item.label} className="flex flex-wrap items-center justify-between gap-3 border-b border-[var(--border)] pb-5 last:border-b-0 last:pb-0">
                   <span className="text-sm uppercase tracking-[0.1em] text-[var(--muted)]">{item.label}</span>
                   {isExternalUrl(item.href) || item.href.startsWith("mailto:") ? (
                     <Link
@@ -42,7 +42,7 @@ export default function ContactPage() {
                       {item.href}
                     </Link>
                   ) : (
-                    <span className="text-sm text-[var(--muted)]">[TO_FILL]</span>
+                    <span className="text-sm text-[var(--muted)]">待补充</span>
                   )}
                 </li>
               ))}

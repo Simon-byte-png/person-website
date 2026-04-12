@@ -4,20 +4,18 @@ export type NavigationItem = {
 };
 
 export const siteConfig = {
-  title: "Samuel Personal Website",
-  description:
-    "A calm personal space for books, thoughts, writing, and lived work.",
-  url: "https://example.com",
-  locale: "en-US",
+  title: "Samuel 个人网站",
+  description: "一个用于读书、写作、思考与长期成长记录的个人空间。",
+  url: "https://simon-byte-png.github.io/person-website",
+  locale: "zh-CN",
   navigation: [
-    { href: "/", label: "Home" },
-    { href: "/about", label: "About" },
-    { href: "/books", label: "Books" },
-    { href: "/blog", label: "Blog" },
-    { href: "/projects", label: "Things" },
-    { href: "/write", label: "Write" },
-    { href: "/contact", label: "Contact" },
+    { href: "/", label: "首页" },
+    { href: "/about", label: "关于" },
+    { href: "/books", label: "读书" },
+    { href: "/notes", label: "笔记" },
+    { href: "/projects", label: "做过的事" },
+    { href: "/write", label: "写作入口" },
+    { href: "/contact", label: "联系" },
   ] as NavigationItem[],
-  footerNote:
-    "Built as a long-term personal notebook. Replace [TO_FILL] fields in /data and keep writing.",
+  footerNote: "这个站点会长期更新。每次提交到 GitHub 后会自动发布到线上。",
 };

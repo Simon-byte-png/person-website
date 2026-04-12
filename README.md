@@ -1,63 +1,91 @@
-# Personal Inner Studio (Next.js 14)
+# Samuel 个人网站（Next.js 14）
 
-This project is a calm personal website for:
+一个中文主导、极简风格的个人网站，定位为长期内容空间：
 
-- books you are reading
-- blog writing
-- inner notes
-- things you have done
+- 读书
+- 笔记（技术 / 商业 / 文艺 / 一路走来）
+- 做过的事
+- 快速写作入口
 
-It is intentionally **not** a resume-first template.
+## 技术栈
 
-## Stack
-
-- Next.js 14 (App Router)
+- Next.js 14（App Router）
 - TypeScript
 - Tailwind CSS
-- Markdown content in `content/blog/*.md`
+- Markdown 内容驱动
+- GitHub Pages 自动部署（GitHub Actions）
 
-## Run
+## 本地运行
 
 ```bash
 npm install
 npm run dev
 ```
 
-Open: [http://localhost:3000](http://localhost:3000)
+打开：<http://localhost:3000>
 
-## Build check
+## 质量检查
 
 ```bash
 npm run lint
 npm run build
 ```
 
-## Main pages
+## 内容目录
 
-- `/` Home
-- `/about`
-- `/books`
-- `/blog`
-- `/blog/[slug]`
-- `/projects` (things done)
-- `/write` (quick import entry)
-- `/contact`
+```text
+content/
+  blog/                 # 旧版博客（兼容）
+  notes/
+    tech/               # 技术笔记
+    business/           # 商业笔记
+    art/                # 文艺笔记
+    journey/            # 一路走来
+```
 
-## Where to edit your real content
+## 新增一篇笔记（最常用）
 
-- `data/profile.ts` -> your 3-line intro, email, social
-- `data/life.ts` -> current books, heart notes, timeline
-- `data/projects.ts` -> things done
-- `content/blog/*.md` -> blog posts
+1. 在对应目录新增 `.md` 文件，比如：
+   - `content/notes/tech/my-note.md`
+2. 使用 frontmatter：
 
-## Easy text import (for non-technical use)
+```md
+---
+title: "标题"
+date: "2026-04-12"
+type: "note"
+category: "tech"
+excerpt: "一句摘要"
+tags: ["标签1", "标签2"]
+---
 
-Open `/write`:
+正文内容...
+```
 
-1. Paste your text
-2. Select type
-3. Copy generated markdown
-4. Send it to your assistant (or save as `.md`)
+3. 提交并推送后，网站自动更新。
 
-This is the easiest way to keep publishing without touching code.
+## 自动发布流程（GitHub Pages）
+
+工作流文件：`.github/workflows/deploy.yml`  
+触发条件：`main` 分支 push
+
+发布地址（项目子路径）：
+
+- <https://simon-byte-png.github.io/person-website/>
+
+> 需要在 GitHub 仓库设置中确认：
+> `Settings -> Pages -> Source` 使用 `GitHub Actions`。
+
+## 非技术发布方式
+
+打开站内 `/write`：
+
+1. 粘贴文字
+2. 选择类型与分类
+3. 复制生成的 Markdown
+4. 保存到 `content/notes/...` 后提交
+
+## 暂缓项
+
+- 本轮未实现 Obsidian 自动同步脚本（后续可单独接入）。
 

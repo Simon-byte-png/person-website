@@ -6,8 +6,8 @@ import { projects } from "@/data/projects";
 import { isExternalUrl } from "@/lib/utils";
 
 export const metadata: Metadata = {
-  title: "Things",
-  description: "Meaningful things I have done.",
+  title: "做过的事",
+  description: "一些真实做过、并且持续有价值的事情。",
 };
 
 export default function ProjectsPage() {
@@ -15,8 +15,8 @@ export default function ProjectsPage() {
     <>
       <PageHero
         eyebrow="Things"
-        title="Things I have done"
-        description="Not a resume list. A few traces of action that mattered."
+        title="做过的事"
+        description="不是求职简历，而是阶段性的行动记录。"
       />
       <section className="section-space pt-4">
         <Container>
@@ -32,10 +32,10 @@ export default function ProjectsPage() {
                       rel="noopener noreferrer"
                       className="text-xs text-[var(--muted)] transition-colors hover:text-[var(--ink)]"
                     >
-                      Open
+                      打开链接
                     </Link>
                   ) : (
-                    <span className="text-xs text-[var(--muted)]">Link [TO_FILL]</span>
+                    <span className="text-xs text-[var(--muted)]">链接待补充</span>
                   )}
                 </div>
                 <h2 className="mt-2 font-display text-3xl text-[var(--ink)]">{project.name}</h2>
@@ -55,3 +55,4 @@ export default function ProjectsPage() {
     </>
   );
 }
+

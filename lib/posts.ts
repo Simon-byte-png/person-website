@@ -10,14 +10,20 @@ import rehypeSlug from "rehype-slug";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
 import rehypeHighlight from "rehype-highlight";
 import rehypeStringify from "rehype-stringify";
+import { isNoteCategory, type NoteCategory, noteCategoryOrder } from "@/data/notes";
 
 const BLOG_DIR = path.join(process.cwd(), "content", "blog");
+const NOTES_DIR = path.join(process.cwd(), "content", "notes");
+
+type ContentType = "blog" | "note";
 
 type PostFrontmatter = {
-  title: string;
-  date: string;
-  excerpt: string;
+  title?: string;
+  date?: string;
+  excerpt?: string;
   tags?: string[];
+  type?: ContentType;
+  category?: string;
 };
 
 export type TableOfContentsItem = {
@@ -26,16 +32,20 @@ export type TableOfContentsItem = {
   level: 2 | 3;
 };
 
-export type PostMeta = {
+export type ContentMeta = {
+  id: string;
   slug: string;
   title: string;
   date: string;
   excerpt: string;
   tags: string[];
   readingTime: number;
+  type: ContentType;
+  category?: NoteCategory;
+  url: string;
 };
 
-export type Post = PostMeta & {
+export type ContentPost = ContentMeta & {
   content: string;
   html: string;
   toc: TableOfContentsItem[];
@@ -53,12 +63,12 @@ function extractToc(content: string) {
 
   let match = headingRegex.exec(content);
   while (match) {
-    const depth = match[1] === "##" ? 2 : 3;
+    const level = match[1] === "##" ? 2 : 3;
     const text = match[2].replace(/[*_`~]/g, "").trim();
     items.push({
       id: slugger.slug(text),
       text,
-      level: depth,
+      level,
     });
     match = headingRegex.exec(content);
   }
@@ -80,54 +90,88 @@ async function markdownToHtml(markdown: string) {
   return String(processed);
 }
 
-function parsePostMeta(slug: string, raw: string): { meta: PostMeta; content: string } {
+async function readMarkdownFiles(directory: string) {
+  try {
+    const files = await fs.readdir(directory);
+    return files.filter((file) => file.endsWith(".md") || file.endsWith(".mdx"));
+  } catch {
+    return [];
+  }
+}
+
+function parseMeta(raw: string) {
   const { data, content } = matter(raw);
-  const frontmatter = data as PostFrontmatter;
-
-  const title = frontmatter.title ?? "Untitled Post";
-  const date = frontmatter.date ?? "1970-01-01";
-  const excerpt = frontmatter.excerpt ?? "";
-  const tags = Array.isArray(frontmatter.tags) ? frontmatter.tags : [];
-
   return {
-    meta: {
-      slug,
-      title,
-      date,
-      excerpt,
-      tags,
-      readingTime: getReadingTime(content),
-    },
+    frontmatter: data as PostFrontmatter,
     content,
   };
 }
 
+function buildMeta({
+  slug,
+  frontmatter,
+  content,
+  type,
+  category,
+}: {
+  slug: string;
+  frontmatter: PostFrontmatter;
+  content: string;
+  type: ContentType;
+  category?: NoteCategory;
+}): ContentMeta {
+  const title = frontmatter.title?.trim() || "Untitled";
+  const date = frontmatter.date?.trim() || "1970-01-01";
+  const excerpt = frontmatter.excerpt?.trim() || "";
+  const tags = Array.isArray(frontmatter.tags) ? frontmatter.tags : [];
+  const frontmatterCategory = frontmatter.category;
+
+  const normalizedCategory =
+    type === "note"
+      ? category ?? (frontmatterCategory && isNoteCategory(frontmatterCategory) ? frontmatterCategory : undefined)
+      : undefined;
+
+  const url = type === "note" && normalizedCategory ? `/notes/${normalizedCategory}/${slug}` : `/blog/${slug}`;
+
+  return {
+    id: `${type}:${normalizedCategory ?? "legacy"}:${slug}`,
+    slug,
+    title,
+    date,
+    excerpt,
+    tags,
+    readingTime: getReadingTime(content),
+    type,
+    category: normalizedCategory,
+    url,
+  };
+}
+
+function sortByDateDesc(items: ContentMeta[]) {
+  return items.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+}
+
 export async function getAllPosts() {
-  const files = await fs.readdir(BLOG_DIR);
-  const markdownFiles = files.filter((file) => file.endsWith(".md") || file.endsWith(".mdx"));
+  const files = await readMarkdownFiles(BLOG_DIR);
 
   const posts = await Promise.all(
-    markdownFiles.map(async (filename) => {
+    files.map(async (filename) => {
       const slug = filename.replace(/\.mdx?$/, "");
-      const fullPath = path.join(BLOG_DIR, filename);
-      const raw = await fs.readFile(fullPath, "utf8");
-      const { meta } = parsePostMeta(slug, raw);
-      return meta;
+      const raw = await fs.readFile(path.join(BLOG_DIR, filename), "utf8");
+      const { frontmatter, content } = parseMeta(raw);
+      return buildMeta({
+        slug,
+        frontmatter,
+        content,
+        type: "blog",
+      });
     }),
   );
 
-  return posts.sort((a, b) => {
-    return new Date(b.date).getTime() - new Date(a.date).getTime();
-  });
+  return sortByDateDesc(posts);
 }
 
-export async function getAllTags() {
-  const posts = await getAllPosts();
-  const uniqueTags = new Set(posts.flatMap((post) => post.tags));
-  return Array.from(uniqueTags).sort((a, b) => a.localeCompare(b));
-}
-
-export async function getPostBySlug(slug: string): Promise<Post | null> {
+export async function getPostBySlug(slug: string): Promise<ContentPost | null> {
   const fullPath = path.join(BLOG_DIR, `${slug}.md`);
   const fallbackPath = path.join(BLOG_DIR, `${slug}.mdx`);
 
@@ -142,14 +186,104 @@ export async function getPostBySlug(slug: string): Promise<Post | null> {
     }
   }
 
-  const { meta, content } = parsePostMeta(slug, raw);
-  const html = await markdownToHtml(content);
-  const toc = extractToc(content);
+  const { frontmatter, content } = parseMeta(raw);
+  const meta = buildMeta({
+    slug,
+    frontmatter,
+    content,
+    type: "blog",
+  });
 
   return {
     ...meta,
     content,
-    html,
-    toc,
+    html: await markdownToHtml(content),
+    toc: extractToc(content),
   };
+}
+
+export async function getAllNotes(options?: { category?: NoteCategory; tag?: string }) {
+  const allNotes: ContentMeta[] = [];
+
+  for (const category of noteCategoryOrder) {
+    const categoryDir = path.join(NOTES_DIR, category);
+    const files = await readMarkdownFiles(categoryDir);
+
+    for (const filename of files) {
+      const slug = filename.replace(/\.mdx?$/, "");
+      const raw = await fs.readFile(path.join(categoryDir, filename), "utf8");
+      const { frontmatter, content } = parseMeta(raw);
+      const meta = buildMeta({
+        slug,
+        frontmatter,
+        content,
+        type: "note",
+        category,
+      });
+      allNotes.push(meta);
+    }
+  }
+
+  let filtered = allNotes;
+  if (options?.category) {
+    filtered = filtered.filter((item) => item.category === options.category);
+  }
+  if (options?.tag) {
+    filtered = filtered.filter((item) => item.tags.includes(options.tag as string));
+  }
+
+  return sortByDateDesc(filtered);
+}
+
+export async function getNoteByCategoryAndSlug(category: NoteCategory, slug: string): Promise<ContentPost | null> {
+  const fullPath = path.join(NOTES_DIR, category, `${slug}.md`);
+  const fallbackPath = path.join(NOTES_DIR, category, `${slug}.mdx`);
+
+  let raw = "";
+  try {
+    raw = await fs.readFile(fullPath, "utf8");
+  } catch {
+    try {
+      raw = await fs.readFile(fallbackPath, "utf8");
+    } catch {
+      return null;
+    }
+  }
+
+  const { frontmatter, content } = parseMeta(raw);
+  const meta = buildMeta({
+    slug,
+    frontmatter,
+    content,
+    type: "note",
+    category,
+  });
+
+  return {
+    ...meta,
+    content,
+    html: await markdownToHtml(content),
+    toc: extractToc(content),
+  };
+}
+
+export async function getAllNotesParams() {
+  const notes = await getAllNotes();
+  return notes
+    .filter((note) => note.category)
+    .map((note) => ({
+      category: note.category as NoteCategory,
+      slug: note.slug,
+    }));
+}
+
+export async function getAllNoteTags(category?: NoteCategory) {
+  const notes = await getAllNotes(category ? { category } : undefined);
+  const tagSet = new Set(notes.flatMap((note) => note.tags));
+  return Array.from(tagSet).sort((a, b) => a.localeCompare(b));
+}
+
+export async function getAllContents() {
+  const [posts, notes] = await Promise.all([getAllPosts(), getAllNotes()]);
+  return sortByDateDesc([...posts, ...notes]);
 }

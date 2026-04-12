@@ -25,4 +25,3 @@ export function NavLink({ href, label }: NavLinkProps) {
     </Link>
   );
 }
-

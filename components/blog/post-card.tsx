@@ -1,10 +1,10 @@
 import Link from "next/link";
 import { Tag } from "@/components/ui/tag";
-import { type PostMeta } from "@/lib/posts";
+import { type ContentMeta } from "@/lib/posts";
 import { formatDate } from "@/lib/utils";
 
 type PostCardProps = {
-  post: PostMeta;
+  post: ContentMeta;
 };
 
 export function PostCard({ post }: PostCardProps) {
@@ -13,7 +13,7 @@ export function PostCard({ post }: PostCardProps) {
       <div className="mb-4 flex flex-wrap items-center gap-2 text-xs text-[var(--muted)]">
         <time dateTime={post.date}>{formatDate(post.date)}</time>
         <span>·</span>
-        <span>{post.readingTime} min read</span>
+        <span>{post.readingTime} 分钟</span>
       </div>
       <h3 className="font-display text-2xl leading-snug text-[var(--ink)]">
         <Link href={`/blog/${post.slug}`} className="transition-colors group-hover:text-[var(--accent)]">
@@ -29,4 +29,3 @@ export function PostCard({ post }: PostCardProps) {
     </article>
   );
 }
-

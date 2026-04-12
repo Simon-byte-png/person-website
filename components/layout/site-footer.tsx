@@ -28,7 +28,7 @@ export function SiteFooter() {
               if (!isExternal) {
                 return (
                   <span key={link.label} className="text-[var(--muted)]">
-                    {link.label}
+                    {link.label} 待补充
                   </span>
                 );
               }
@@ -51,4 +51,3 @@ export function SiteFooter() {
     </footer>
   );
 }
-

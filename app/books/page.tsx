@@ -4,8 +4,8 @@ import { Container } from "@/components/layout/container";
 import { currentBooks, readingPhilosophy } from "@/data/life";
 
 export const metadata: Metadata = {
-  title: "Books",
-  description: "What I am currently reading and why it matters.",
+  title: "读书",
+  description: "我正在读的书，以及每本书留下的短注释。",
 };
 
 export default function BooksPage() {
@@ -13,8 +13,8 @@ export default function BooksPage() {
     <>
       <PageHero
         eyebrow="Books"
-        title="Reading desk"
-        description="A small list of books I am currently reading, with short notes."
+        title="正在读什么"
+        description="阅读不是收集知识，而是训练判断。这里记录我正在读的书。"
       />
       <section className="section-space pt-4">
         <Container className="space-y-7">

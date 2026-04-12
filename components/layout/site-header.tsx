@@ -6,7 +6,7 @@ import { NavLink } from "@/components/layout/nav-link";
 
 export function SiteHeader() {
   return (
-    <header className="sticky top-0 z-50 border-b border-[var(--border)]/60 bg-[var(--bg)]/88 backdrop-blur-xl">
+    <header className="sticky top-0 z-50 border-b border-[var(--border)]/70 bg-[var(--bg)]/86 backdrop-blur-xl">
       <Container className="flex h-16 items-center justify-between">
         <Link href="/" className="group inline-flex items-baseline gap-2">
           <span className="font-display text-[1.2rem] font-semibold text-[var(--ink)]">{profile.name}</span>

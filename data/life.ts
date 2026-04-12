@@ -17,33 +17,33 @@ export type LifeThing = {
 };
 
 export const readingPhilosophy =
-  "Read for judgment, run for endurance, write for clarity. In the AI era, authenticity matters more.";
+  "以阅读训练判断，以跑步训练耐力，以写作训练清晰。在 AI 时代，真实感是最稀缺的能力。";
 
 export const currentBooks: BookItem[] = [
   {
     title: "九诗心",
     author: "[TO_FILL] Author",
-    progress: "Reading",
-    note: "What I keep from this book: in the AI era, the rare thing is real feeling.",
+    progress: "阅读中",
+    note: "这本书给我的提醒是：技术越快，人的真实感越珍贵。",
   },
   {
     title: "穷查理宝典",
     author: "Peter Kaufman (ed.)",
-    progress: "Re-reading",
-    note: "Mental models are useful only when they change decisions in real life.",
+    progress: "重读中",
+    note: "多元思维模型只有真正改变决策时，才算被理解。",
   },
   {
     title: "当我谈跑步时，我谈些什么",
     author: "Haruki Murakami",
-    progress: "Finished",
-    note: "Daily discipline is a long conversation with yourself.",
+    progress: "已读",
+    note: "长期主义不是口号，是每天重复的朴素动作。",
   },
 ];
 
 export const heartNotes: HeartNote[] = [
   {
     date: "2026-03-14",
-    text: "在AI时代，更重要的是保持真实感。",
+    text: "在 AI 时代，更重要的是保持真实感。",
   },
   {
     date: "2026-03-09",
@@ -58,17 +58,17 @@ export const heartNotes: HeartNote[] = [
 export const lifeTimeline: LifeThing[] = [
   {
     year: "2025",
-    title: "Started publishing in WeChat Official Account",
-    description: "Published long-form writing in the personal account 'Xiaotong's Study Room'.",
+    title: "开始公众号长期写作",
+    description: "在个人公众号「小通的书房」持续发布长文。",
   },
   {
     year: "2025-2026",
-    title: "Hosted the podcast 'Qiu Shi 56Hz'",
-    description: "Built a complete podcast workflow and continued episode production.",
+    title: "创办并主理播客《求是 56Hz》",
+    description: "跑通选题、录制、剪辑、发布的完整流程，持续更新节目。",
   },
   {
     year: "2026",
-    title: "Launched this personal inner studio",
-    description: "A long-term space for books, blog posts, inner notes, and things done.",
+    title: "上线个人网站",
+    description: "建立一个可长期沉淀的空间，集中记录读书、笔记、心里话和经历。",
   },
 ];

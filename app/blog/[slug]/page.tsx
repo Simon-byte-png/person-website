@@ -21,7 +21,7 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
   const post = await getPostBySlug(params.slug);
   if (!post) {
     return {
-      title: "Post Not Found",
+      title: "文章不存在",
     };
   }
 
@@ -45,13 +45,16 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
             <div className="mb-4 flex flex-wrap items-center gap-2 text-xs text-[var(--muted)]">
               <time dateTime={post.date}>{formatDate(post.date)}</time>
               <span>·</span>
-              <span>{post.readingTime} min read</span>
+              <span>{post.readingTime} 分钟</span>
+              <span className="rounded-full bg-[var(--accent-soft)] px-2.5 py-1 text-[11px] text-[var(--accent)]">
+                旧版博客
+              </span>
             </div>
             <h1 className="font-display text-4xl leading-tight text-[var(--ink)] md:text-6xl">{post.title}</h1>
             <p className="mt-4 text-base leading-relaxed text-[var(--muted)] md:text-lg">{post.excerpt}</p>
             <div className="mt-5 flex flex-wrap gap-2">
               {post.tags.map((tag) => (
-                <Tag key={tag} label={tag} href={`/blog?tag=${encodeURIComponent(tag)}`} />
+                <Tag key={tag} label={tag} href={`/notes/tag/${encodeURIComponent(tag)}`} />
               ))}
             </div>
           </header>
@@ -62,4 +65,3 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
     </section>
   );
 }
-

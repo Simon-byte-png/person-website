@@ -6,10 +6,10 @@ export function cn(...inputs: ClassValue[]) {
 
 export function formatDate(dateString: string) {
   const date = new Date(dateString);
-  return new Intl.DateTimeFormat("en-US", {
+  return new Intl.DateTimeFormat("zh-CN", {
     year: "numeric",
-    month: "short",
-    day: "numeric",
+    month: "2-digit",
+    day: "2-digit",
   }).format(date);
 }
 
