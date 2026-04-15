@@ -1,19 +1,8 @@
 # Samuel 个人网站（Next.js 14）
 
-一个中文主导、极简风格的个人网站，定位为长期内容空间：
+这是一个以内容为中心的个人网站，技术栈为 Next.js 14 + TypeScript + Tailwind CSS，部署在 GitHub Pages。
 
-- 读书
-- 笔记（技术 / 商业 / 文艺 / 一路走来）
-- 做过的事
-- 快速写作入口
-
-## 技术栈
-
-- Next.js 14（App Router）
-- TypeScript
-- Tailwind CSS
-- Markdown 内容驱动
-- GitHub Pages 自动部署（GitHub Actions）
+线上地址：<https://simon-byte-png.github.io/person-website/>
 
 ## 本地运行
 
@@ -35,57 +24,72 @@ npm run build
 
 ```text
 content/
-  blog/                 # 旧版博客（兼容）
+  blog/                 # 历史 blog 内容（兼容）
   notes/
-    tech/               # 技术笔记
-    business/           # 商业笔记
-    art/                # 文艺笔记
-    journey/            # 一路走来
+    tech/
+    business/
+    art/
+    journey/
 ```
 
-## 新增一篇笔记（最常用）
+## 新增一篇笔记（手动方式）
 
-1. 在对应目录新增 `.md` 文件，比如：
-   - `content/notes/tech/my-note.md`
-2. 使用 frontmatter：
+1. 在对应分类目录新建 `.md` 文件（建议文件名也用英文 slug）。
+2. frontmatter 至少包含以下字段：
 
 ```md
 ---
 title: "标题"
-date: "2026-04-12"
+slug: "english-kebab-slug"
+date: "2026-04-15"
 type: "note"
 category: "tech"
 excerpt: "一句摘要"
 tags: ["标签1", "标签2"]
 ---
-
-正文内容...
 ```
 
-3. 提交并推送后，网站自动更新。
+3. 提交并 push 到 `main`，GitHub Actions 会自动发布。
 
-## 自动发布流程（GitHub Pages）
+## Obsidian 同步（推荐）
 
-工作流文件：`.github/workflows/deploy.yml`  
-触发条件：`main` 分支 push
+脚本文件：`sync-obsidian.ps1`
 
-发布地址（项目子路径）：
+目录映射（已内置）：
 
-- <https://simon-byte-png.github.io/person-website/>
+- `C:\Users\dhpan\Documents\Obsidian Vault\技术笔记` -> `content/notes/tech`
+- `C:\Users\dhpan\Documents\Obsidian Vault\商业笔记` -> `content/notes/business`
+- `C:\Users\dhpan\Documents\Obsidian Vault\文艺笔记` -> `content/notes/art`
+- `C:\Users\dhpan\Documents\Obsidian Vault\一路走来` -> `content/notes/journey`
 
-> 需要在 GitHub 仓库设置中确认：
-> `Settings -> Pages -> Source` 使用 `GitHub Actions`。
+执行命令：
 
-## 非技术发布方式
+```powershell
+.\sync-obsidian.ps1
+```
 
-打开站内 `/write`：
+脚本会自动：
 
-1. 粘贴文字
-2. 选择类型与分类
-3. 复制生成的 Markdown
-4. 保存到 `content/notes/...` 后提交
+- 同步 Obsidian `.md` 到站点 `content/notes/*`
+- `git add content/notes`
+- `git commit -m "notes: sync from obsidian"`
+- `git push origin main`
 
-## 暂缓项
+### Slug 规则（关键）
 
-- 本轮未实现 Obsidian 自动同步脚本（后续可单独接入）。
+- 同步脚本会读取 frontmatter 的 `slug` 作为目标文件名和网页 URL。
+- `slug` 必须是英文 kebab-case：`^[a-z0-9]+(?:-[a-z0-9]+)*$`
+- 没有 `slug` 或格式不合法的笔记会被跳过并显示警告。
 
+模板文件：`obsidian-frontmatter-template.md`
+
+## GitHub Pages 自动部署
+
+- 工作流：`.github/workflows/deploy.yml`
+- 触发：`main` 分支 push
+- 仓库设置：`Settings -> Pages -> Source` 选择 `GitHub Actions`
+
+## 说明
+
+- 本站现在统一使用英文 slug，避免中文 URL 编码导致的路由 404。
+- 旧中文详情链接不做兼容（按当前约定）。

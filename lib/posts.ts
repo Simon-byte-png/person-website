@@ -24,7 +24,22 @@ type PostFrontmatter = {
   tags?: string[];
   type?: ContentType;
   category?: string;
+  slug?: string;
 };
+
+const ENGLISH_SLUG_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+
+function normalizeSlug(value?: string) {
+  const trimmed = value?.trim();
+  if (!trimmed) {
+    return null;
+  }
+  return ENGLISH_SLUG_PATTERN.test(trimmed) ? trimmed : null;
+}
+
+function resolveNoteSlug(frontmatter: PostFrontmatter, fileSlug: string) {
+  return normalizeSlug(frontmatter.slug) ?? fileSlug;
+}
 
 export type TableOfContentsItem = {
   id: string;
@@ -108,18 +123,19 @@ function parseMeta(raw: string) {
 }
 
 function buildMeta({
-  slug,
+  sourceSlug,
   frontmatter,
   content,
   type,
   category,
 }: {
-  slug: string;
+  sourceSlug: string;
   frontmatter: PostFrontmatter;
   content: string;
   type: ContentType;
   category?: NoteCategory;
 }): ContentMeta {
+  const slug = type === "note" ? resolveNoteSlug(frontmatter, sourceSlug) : sourceSlug;
   const title = frontmatter.title?.trim() || "Untitled";
   const date = frontmatter.date?.trim() || "1970-01-01";
   const excerpt = frontmatter.excerpt?.trim() || "";
@@ -160,7 +176,7 @@ export async function getAllPosts() {
       const raw = await fs.readFile(path.join(BLOG_DIR, filename), "utf8");
       const { frontmatter, content } = parseMeta(raw);
       return buildMeta({
-        slug,
+        sourceSlug: slug,
         frontmatter,
         content,
         type: "blog",
@@ -188,7 +204,7 @@ export async function getPostBySlug(slug: string): Promise<ContentPost | null> {
 
   const { frontmatter, content } = parseMeta(raw);
   const meta = buildMeta({
-    slug,
+    sourceSlug: slug,
     frontmatter,
     content,
     type: "blog",
@@ -214,7 +230,7 @@ export async function getAllNotes(options?: { category?: NoteCategory; tag?: str
       const raw = await fs.readFile(path.join(categoryDir, filename), "utf8");
       const { frontmatter, content } = parseMeta(raw);
       const meta = buildMeta({
-        slug,
+        sourceSlug: slug,
         frontmatter,
         content,
         type: "note",
@@ -236,35 +252,43 @@ export async function getAllNotes(options?: { category?: NoteCategory; tag?: str
 }
 
 export async function getNoteByCategoryAndSlug(category: NoteCategory, slug: string): Promise<ContentPost | null> {
-  const fullPath = path.join(NOTES_DIR, category, `${slug}.md`);
-  const fallbackPath = path.join(NOTES_DIR, category, `${slug}.mdx`);
-
-  let raw = "";
-  try {
-    raw = await fs.readFile(fullPath, "utf8");
-  } catch {
+  const categoryDir = path.join(NOTES_DIR, category);
+  const files = await readMarkdownFiles(categoryDir);
+  const decodedSlug = (() => {
     try {
-      raw = await fs.readFile(fallbackPath, "utf8");
+      return decodeURIComponent(slug);
     } catch {
-      return null;
+      return slug;
     }
+  })();
+
+  for (const filename of files) {
+    const fileSlug = filename.replace(/\.mdx?$/, "");
+    const raw = await fs.readFile(path.join(categoryDir, filename), "utf8");
+    const { frontmatter, content } = parseMeta(raw);
+    const resolvedSlug = resolveNoteSlug(frontmatter, fileSlug);
+
+    if (resolvedSlug !== decodedSlug) {
+      continue;
+    }
+
+    const meta = buildMeta({
+      sourceSlug: fileSlug,
+      frontmatter,
+      content,
+      type: "note",
+      category,
+    });
+
+    return {
+      ...meta,
+      content,
+      html: await markdownToHtml(content),
+      toc: extractToc(content),
+    };
   }
 
-  const { frontmatter, content } = parseMeta(raw);
-  const meta = buildMeta({
-    slug,
-    frontmatter,
-    content,
-    type: "note",
-    category,
-  });
-
-  return {
-    ...meta,
-    content,
-    html: await markdownToHtml(content),
-    toc: extractToc(content),
-  };
+  return null;
 }
 
 export async function getAllNotesParams() {

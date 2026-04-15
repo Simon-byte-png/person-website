@@ -1,11 +1,14 @@
 ﻿---
 title: "反思 OpenClaw"
+slug: "openclaw-reflection"
 date: "2026-04-14"
 type: "note"
 category: "tech"
 excerpt: "一次从早期体验者到旁观者的 AI 风潮观察。"
 tags: ["AI", "观察", "OpenClaw"]
----我想写写自己在面对这次“OpenClaw”风潮时的感受。
+---
+
+我想写写自己在面对这次“OpenClaw”风潮时的感受。
 
 我算是最早的那一批，在 2 月份可能就真正装上了。
 

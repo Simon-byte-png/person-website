@@ -15,6 +15,14 @@ type NoteDetailPageProps = {
   };
 };
 
+function decodeSlug(value: string) {
+  try {
+    return decodeURIComponent(value);
+  } catch {
+    return value;
+  }
+}
+
 export async function generateStaticParams() {
   const items = await getAllNotesParams();
   return items.map((item) => ({
@@ -27,7 +35,7 @@ export async function generateMetadata({ params }: NoteDetailPageProps): Promise
   if (!isNoteCategory(params.category)) {
     return { title: "笔记不存在" };
   }
-  const note = await getNoteByCategoryAndSlug(params.category, params.slug);
+  const note = await getNoteByCategoryAndSlug(params.category, decodeSlug(params.slug));
   if (!note) {
     return { title: "笔记不存在" };
   }
@@ -43,7 +51,7 @@ export default async function NoteDetailPage({ params }: NoteDetailPageProps) {
     notFound();
   }
   const category = params.category as NoteCategory;
-  const note = await getNoteByCategoryAndSlug(category, params.slug);
+  const note = await getNoteByCategoryAndSlug(category, decodeSlug(params.slug));
   if (!note) {
     notFound();
   }
