@@ -66,7 +66,7 @@ export default async function HomePage() {
               {topBooks.map((book) => (
                 <li key={`${book.title}-${book.author}`} className="border-l border-[var(--border)] pl-4">
                   <p className="text-base text-[var(--ink)]">{book.title}</p>
-                  <p className="text-sm text-[var(--muted)]">{book.author}</p>
+                  {book.author ? <p className="text-sm text-[var(--muted)]">{book.author}</p> : null}
                   <p className="mt-1 text-xs text-[var(--muted)]">{book.progress}</p>
                 </li>
               ))}

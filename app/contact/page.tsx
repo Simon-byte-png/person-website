@@ -3,7 +3,6 @@ import Link from "next/link";
 import { PageHero } from "@/components/common/page-hero";
 import { Container } from "@/components/layout/container";
 import { profile } from "@/data/profile";
-import { isExternalUrl } from "@/lib/utils";
 
 export const metadata: Metadata = {
   title: "联系",
@@ -15,7 +14,7 @@ const contactLinks = [
   { label: "GitHub", href: profile.social.github },
   { label: "X / Twitter", href: profile.social.twitter },
   { label: "LinkedIn", href: profile.social.linkedin },
-];
+].filter((item) => item.href);
 
 export default function ContactPage() {
   return (
@@ -32,18 +31,14 @@ export default function ContactPage() {
               {contactLinks.map((item) => (
                 <li key={item.label} className="flex flex-wrap items-center justify-between gap-3 border-b border-[var(--border)] pb-5 last:border-b-0 last:pb-0">
                   <span className="text-sm uppercase tracking-[0.1em] text-[var(--muted)]">{item.label}</span>
-                  {isExternalUrl(item.href) || item.href.startsWith("mailto:") ? (
-                    <Link
-                      href={item.href}
-                      target={item.href.startsWith("mailto:") ? undefined : "_blank"}
-                      rel={item.href.startsWith("mailto:") ? undefined : "noopener noreferrer"}
-                      className="text-sm text-[var(--ink)] transition-colors hover:text-[var(--accent)]"
-                    >
-                      {item.href}
-                    </Link>
-                  ) : (
-                    <span className="text-sm text-[var(--muted)]">待补充</span>
-                  )}
+                  <Link
+                    href={item.href}
+                    target={item.href.startsWith("mailto:") ? undefined : "_blank"}
+                    rel={item.href.startsWith("mailto:") ? undefined : "noopener noreferrer"}
+                    className="text-sm text-[var(--ink)] transition-colors hover:text-[var(--accent)]"
+                  >
+                    {item.href}
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -53,4 +48,3 @@ export default function ContactPage() {
     </>
   );
 }
-

@@ -49,6 +49,7 @@ export type TableOfContentsItem = {
 
 export type ContentMeta = {
   id: string;
+  contentId: string;
   slug: string;
   title: string;
   date: string;
@@ -66,12 +67,12 @@ export type ContentPost = ContentMeta & {
   toc: TableOfContentsItem[];
 };
 
-function getReadingTime(content: string) {
+export function getReadingTime(content: string) {
   const words = content.trim().split(/\s+/).length;
   return Math.max(1, Math.ceil(words / 220));
 }
 
-function extractToc(content: string) {
+export function extractToc(content: string) {
   const slugger = new GithubSlugger();
   const items: TableOfContentsItem[] = [];
   const headingRegex = /^(##|###)\s+(.+)$/gm;
@@ -103,6 +104,10 @@ async function markdownToHtml(markdown: string) {
     .process(markdown);
 
   return String(processed);
+}
+
+export async function renderMarkdown(markdown: string) {
+  return markdownToHtml(markdown);
 }
 
 async function readMarkdownFiles(directory: string) {
@@ -148,9 +153,11 @@ function buildMeta({
       : undefined;
 
   const url = type === "note" && normalizedCategory ? `/notes/${normalizedCategory}/${slug}` : `/blog/${slug}`;
+  const contentId = `${type}:${normalizedCategory ?? "legacy"}:${slug}`;
 
   return {
     id: `${type}:${normalizedCategory ?? "legacy"}:${slug}`,
+    contentId,
     slug,
     title,
     date,

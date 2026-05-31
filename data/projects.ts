@@ -6,7 +6,7 @@ export type ProjectItem = {
   summary: string;
   stack: string[];
   status: ProjectStatus;
-  href: string;
+  href?: string;
   featured?: boolean;
 };
 
@@ -18,7 +18,6 @@ export const projects: ProjectItem[] = [
       "创办并主理播客，已更新至第 5 期，完整跑通从选题到上线的全流程。",
     stack: ["播客", "访谈", "内容生产"],
     status: "Completed",
-    href: "[TO_FILL] https://example.com/podcast",
     featured: true,
   },
   {
@@ -28,7 +27,6 @@ export const projects: ProjectItem[] = [
       "搭建个人写作栏目并持续输出深度内容，曾产出 10w+ 阅读文章。",
     stack: ["写作", "公众号", "社群"],
     status: "Completed",
-    href: "[TO_FILL] https://example.com/wechat",
     featured: true,
   },
   {
@@ -38,7 +36,6 @@ export const projects: ProjectItem[] = [
       "组织并参与辩论赛与分享活动，获得校级冠军与“最佳辩手”称号。",
     stack: ["组织力", "表达", "执行力"],
     status: "Completed",
-    href: "[TO_FILL] https://example.com/debate",
     featured: true,
   },
   {
@@ -48,6 +45,5 @@ export const projects: ProjectItem[] = [
       "持续将哲学思考方式应用到 AI 工具实践、产品判断与日常决策中。",
     stack: ["AI", "哲学", "思考方法"],
     status: "In Progress",
-    href: "[TO_FILL] https://example.com/ai-philosophy",
   },
 ];

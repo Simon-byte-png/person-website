@@ -26,7 +26,7 @@ export default function BooksPage() {
               <article key={`${book.title}-${book.author}`} className="surface-card p-7">
                 <p className="text-xs uppercase tracking-[0.12em] text-[var(--muted)]">{book.progress}</p>
                 <h2 className="mt-2 font-display text-3xl text-[var(--ink)]">{book.title}</h2>
-                <p className="mt-2 text-sm text-[var(--muted)]">{book.author}</p>
+                {book.author ? <p className="mt-2 text-sm text-[var(--muted)]">{book.author}</p> : null}
                 <p className="mt-4 text-sm leading-relaxed text-[var(--ink)]">{book.note}</p>
               </article>
             ))}
@@ -36,4 +36,3 @@ export default function BooksPage() {
     </>
   );
 }
-

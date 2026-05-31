@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
+import { AuthProvider } from "@/components/auth/auth-provider";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
 import { siteConfig } from "@/data/site";
@@ -53,12 +54,14 @@ export default function RootLayout({
   return (
     <html lang={siteConfig.locale} suppressHydrationWarning>
       <body className={`${sans.variable} ${serif.variable} ${mono.variable} bg-[var(--bg)] text-[var(--ink)]`}>
-        <div className="site-shell relative min-h-screen">
-          <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(circle_at_top_left,rgba(66,92,173,0.08),transparent_45%),radial-gradient(circle_at_bottom_right,rgba(30,36,58,0.06),transparent_38%)]" />
-          <SiteHeader />
-          <main>{children}</main>
-          <SiteFooter />
-        </div>
+        <AuthProvider>
+          <div className="site-shell relative min-h-screen">
+            <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(circle_at_top_left,rgba(66,92,173,0.08),transparent_45%),radial-gradient(circle_at_bottom_right,rgba(30,36,58,0.06),transparent_38%)]" />
+            <SiteHeader />
+            <main>{children}</main>
+            <SiteFooter />
+          </div>
+        </AuthProvider>
       </body>
     </html>
   );

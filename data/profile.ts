@@ -18,8 +18,8 @@ export const profile = {
   email: "3076986920@qq.com",
   avatar: "/avatar-placeholder.svg",
   social: {
-    github: "[TO_FILL] https://github.com/username",
-    twitter: "[TO_FILL] https://x.com/username",
-    linkedin: "[TO_FILL] https://linkedin.com/in/username",
+    github: "https://github.com/Simon-byte-png",
+    twitter: "",
+    linkedin: "",
   },
 };

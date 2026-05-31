@@ -8,6 +8,8 @@ import { getAllNotesParams, getNoteByCategoryAndSlug } from "@/lib/posts";
 import { formatDate } from "@/lib/utils";
 import { isNoteCategory, noteCategoryConfig, type NoteCategory } from "@/data/notes";
 
+export const dynamic = "force-dynamic";
+
 type NoteDetailPageProps = {
   params: {
     category: string;
@@ -84,7 +86,9 @@ export default async function NoteDetailPage({ params }: NoteDetailPageProps) {
           </header>
           <div className="markdown" dangerouslySetInnerHTML={{ __html: note.html }} />
         </article>
-        <TableOfContents items={note.toc} />
+        <aside className="space-y-6">
+          <TableOfContents items={note.toc} />
+        </aside>
       </Container>
     </section>
   );

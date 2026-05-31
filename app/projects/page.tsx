@@ -25,7 +25,7 @@ export default function ProjectsPage() {
               <article key={project.id} className="surface-card p-7">
                 <div className="flex items-center justify-between gap-3">
                   <p className="text-xs uppercase tracking-[0.14em] text-[var(--muted)]">{project.status}</p>
-                  {isExternalUrl(project.href) ? (
+                  {project.href && isExternalUrl(project.href) ? (
                     <Link
                       href={project.href}
                       target="_blank"
@@ -34,9 +34,7 @@ export default function ProjectsPage() {
                     >
                       打开链接
                     </Link>
-                  ) : (
-                    <span className="text-xs text-[var(--muted)]">链接待补充</span>
-                  )}
+                  ) : null}
                 </div>
                 <h2 className="mt-2 font-display text-3xl text-[var(--ink)]">{project.name}</h2>
                 <p className="mt-3 text-sm leading-relaxed text-[var(--muted)]">{project.summary}</p>
@@ -55,4 +53,3 @@ export default function ProjectsPage() {
     </>
   );
 }
-

@@ -2,14 +2,15 @@ import type { MetadataRoute } from "next";
 import { getAllNotes, getAllPosts } from "@/lib/posts";
 import { noteCategoryOrder } from "@/data/notes";
 import { siteConfig } from "@/data/site";
+import { getPublishedPosts } from "@/lib/blog/repository";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const staticRoutes = ["", "/about", "/books", "/notes", "/projects", "/write", "/contact"].map((route) => ({
+  const staticRoutes = ["", "/about", "/blog", "/books", "/notes", "/projects", "/write", "/contact"].map((route) => ({
     url: `${siteConfig.url}${route}`,
     lastModified: new Date(),
   }));
 
-  const [notes, posts] = await Promise.all([getAllNotes(), getAllPosts()]);
+  const [notes, posts, databasePosts] = await Promise.all([getAllNotes(), getAllPosts(), getPublishedPosts()]);
 
   const categoryRoutes = noteCategoryOrder.map((category) => ({
     url: `${siteConfig.url}/notes/${category}`,
@@ -41,5 +42,18 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     lastModified: new Date(post.date),
   }));
 
-  return [...staticRoutes, ...categoryRoutes, ...tagRoutes, ...categoryTagRoutes, ...noteRoutes, ...legacyBlogRoutes];
+  const databaseBlogRoutes = databasePosts.map((post) => ({
+    url: `${siteConfig.url}/blog/${post.slug}`,
+    lastModified: post.updatedAt,
+  }));
+
+  return [
+    ...staticRoutes,
+    ...categoryRoutes,
+    ...tagRoutes,
+    ...categoryTagRoutes,
+    ...noteRoutes,
+    ...legacyBlogRoutes,
+    ...databaseBlogRoutes,
+  ];
 }

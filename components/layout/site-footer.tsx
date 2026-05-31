@@ -8,7 +8,7 @@ const socialLinks = [
   { label: "GitHub", href: profile.social.github },
   { label: "X", href: profile.social.twitter },
   { label: "LinkedIn", href: profile.social.linkedin },
-];
+].filter((link) => isExternalUrl(link.href));
 
 export function SiteFooter() {
   return (
@@ -23,28 +23,17 @@ export function SiteFooter() {
             {profile.email}
           </a>
           <div className="flex gap-4">
-            {socialLinks.map((link) => {
-              const isExternal = isExternalUrl(link.href);
-              if (!isExternal) {
-                return (
-                  <span key={link.label} className="text-[var(--muted)]">
-                    {link.label} 待补充
-                  </span>
-                );
-              }
-
-              return (
-                <Link
-                  key={link.label}
-                  href={link.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-[var(--muted)] transition-colors hover:text-[var(--ink)]"
-                >
-                  {link.label}
-                </Link>
-              );
-            })}
+            {socialLinks.map((link) => (
+              <Link
+                key={link.label}
+                href={link.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[var(--muted)] transition-colors hover:text-[var(--ink)]"
+              >
+                {link.label}
+              </Link>
+            ))}
           </div>
         </div>
       </Container>
