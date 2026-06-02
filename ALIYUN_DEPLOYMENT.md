@@ -2,6 +2,8 @@
 
 本文档用于把当前 Next.js 全栈个人网站部署到阿里云 ECS。当前 V1.0 不再依赖 Vercel 或 Neon 运行，运行形态是 Docker Compose + PostgreSQL + Nginx + Clerk。
 
+Docker 基础镜像使用 `docker.m.daocloud.io/library/*` 前缀，避免国内 ECS 直接拉 Docker Hub 超时。
+
 ## 1. ECS 准备
 
 建议使用 Ubuntu 22.04/24.04 或 Alibaba Cloud Linux 3，开放安全组端口：
