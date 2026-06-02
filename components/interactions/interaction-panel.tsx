@@ -226,7 +226,7 @@ export function InteractionPanel({ postId, initialState }: InteractionPanelProps
 
       {!state.backendConfigured ? (
         <p className="rounded-xl border border-[var(--border)] bg-[var(--surface-soft)] px-4 py-3 text-sm text-[var(--muted)]">
-          后端未配置。部署到 Vercel 并设置 Clerk 与 Neon 环境变量后，评论和点赞会自动启用。
+          后端未配置。设置 Clerk 与 PostgreSQL 环境变量后，评论和点赞会自动启用。
         </p>
       ) : null}
       {error ? <p className="text-sm text-red-600">{error}</p> : null}

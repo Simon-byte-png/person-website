@@ -1,8 +1,9 @@
-import { neon } from "@neondatabase/serverless";
-import { drizzle } from "drizzle-orm/neon-http";
+import { drizzle, type NodePgDatabase } from "drizzle-orm/node-postgres";
+import { Pool } from "pg";
 import * as schema from "@/lib/db/schema";
 
-let cachedDb: ReturnType<typeof drizzle<typeof schema>> | null = null;
+let cachedPool: Pool | null = null;
+let cachedDb: NodePgDatabase<typeof schema> | null = null;
 
 export function hasDatabase() {
   return Boolean(process.env.DATABASE_URL);
@@ -14,7 +15,12 @@ export function getDb() {
   }
 
   if (!cachedDb) {
-    cachedDb = drizzle(neon(process.env.DATABASE_URL), { schema });
+    cachedPool = new Pool({
+      connectionString: process.env.DATABASE_URL,
+      max: Number(process.env.DATABASE_POOL_MAX ?? "10"),
+      ssl: process.env.DATABASE_SSL === "true" ? { rejectUnauthorized: false } : undefined,
+    });
+    cachedDb = drizzle(cachedPool, { schema });
   }
 
   return cachedDb;

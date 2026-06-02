@@ -11,12 +11,12 @@
   },
   "dependencies": {
     "@clerk/nextjs": "^7.4.2",
-    "@neondatabase/serverless": "^1.1.0",
     "clsx": "^2.1.1",
     "drizzle-orm": "^0.45.2",
     "github-slugger": "^2.0.0",
     "gray-matter": "^4.0.3",
     "next": "^16.2.6",
+    "pg": "^8.21.0",
     "react": "^19.2.6",
     "react-dom": "^19.2.6",
     "rehype-autolink-headings": "^7.1.0",
@@ -30,6 +30,7 @@
   },
   "devDependencies": {
     "@types/node": "^20",
+    "@types/pg": "^8.20.0",
     "@types/react": "^19.2.15",
     "@types/react-dom": "^19.2.3",
     "drizzle-kit": "^0.31.10",

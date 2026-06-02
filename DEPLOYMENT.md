@@ -1,6 +1,8 @@
-# V1.0 部署说明
+# Vercel + Neon 旧部署说明
 
-本文档用于把当前站点部署为 Vercel + Clerk + Neon 的真实全栈版本。不要把旧 GitHub Pages 地址当作 V1.0 功能验收地址，GitHub Pages 只能承载静态内容，不能运行登录、评论、点赞和数据库写入。
+本文档保留 Vercel + Clerk + Neon 的旧部署路径，方便回溯。当前推荐上线路径已迁移为阿里云 ECS Docker Compose，见 [ALIYUN_DEPLOYMENT.md](/Users/samuelzhu/Desktop/codex/person-website/ALIYUN_DEPLOYMENT.md)。
+
+不要把旧 GitHub Pages 地址当作 V1.0 功能验收地址，GitHub Pages 只能承载静态内容，不能运行登录、评论、点赞和数据库写入。
 
 ## 1. 创建 Neon 数据库
 

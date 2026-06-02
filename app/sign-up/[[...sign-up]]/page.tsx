@@ -9,7 +9,7 @@ export default function SignUpPage() {
       <section className="section-space">
         <Container>
           <div className="surface-card max-w-xl p-8 text-sm text-[var(--muted)]">
-            请先在 Vercel 配置 Clerk 环境变量，再启用 GitHub 登录。
+            请先配置 Clerk 环境变量，再启用 GitHub 登录。
           </div>
         </Container>
       </section>

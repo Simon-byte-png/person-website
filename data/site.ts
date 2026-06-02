@@ -18,5 +18,5 @@ export const siteConfig = {
     { href: "/write", label: "写作入口" },
     { href: "/contact", label: "联系" },
   ] as NavigationItem[],
-  footerNote: "V1.0 使用 Vercel + Clerk + Neon 部署，旧 GitHub Pages 地址仅保留静态站兼容。",
+  footerNote: "V1.0 使用阿里云 ECS + Docker + PostgreSQL + Clerk 部署，旧 GitHub Pages 地址仅保留静态站兼容。",
 };

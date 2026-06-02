@@ -26,7 +26,7 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
 
   return (
     <>
-      <PageHero eyebrow="Blog" title="博客" description="V1.0 博客文章从 Neon 数据库读取，支持搜索、评论、点赞和热榜。" />
+      <PageHero eyebrow="Blog" title="博客" description="V1.0 博客文章从 PostgreSQL 数据库读取，支持搜索、评论、点赞和热榜。" />
       <section className="section-space pt-4">
         <Container className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_300px] lg:items-start">
           <div className="space-y-6">

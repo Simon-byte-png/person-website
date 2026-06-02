@@ -65,7 +65,7 @@ export default async function NewPostPage() {
         <div className="max-w-3xl space-y-3">
           <p className="text-xs uppercase tracking-[0.16em] text-[var(--muted)]">Admin</p>
           <h1 className="font-display text-4xl text-[var(--ink)] md:text-6xl">新建博客</h1>
-          <p className="text-sm text-[var(--muted)]">文章将保存到 Neon posts 表，保存成功后跳转到博客详情页。</p>
+          <p className="text-sm text-[var(--muted)]">文章将保存到 PostgreSQL posts 表，保存成功后跳转到博客详情页。</p>
         </div>
         <PostEditorForm />
       </Container>
