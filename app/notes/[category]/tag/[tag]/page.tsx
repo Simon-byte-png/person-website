@@ -8,10 +8,10 @@ import { getAllNotes, getAllNoteTags } from "@/lib/posts";
 import { isNoteCategory, noteCategoryConfig, noteCategoryOrder, type NoteCategory } from "@/data/notes";
 
 type CategoryTagNotesPageProps = {
-  params: {
+  params: Promise<{
     category: string;
     tag: string;
-  };
+  }>;
 };
 
 function decodeTag(value: string) {
@@ -34,12 +34,13 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: CategoryTagNotesPageProps): Promise<Metadata> {
-  if (!isNoteCategory(params.category)) {
+  const { category, tag: rawTag } = await params;
+  if (!isNoteCategory(category)) {
     return { title: "分类不存在" };
   }
 
-  const tag = decodeTag(params.tag);
-  const categoryLabel = noteCategoryConfig[params.category].label;
+  const tag = decodeTag(rawTag);
+  const categoryLabel = noteCategoryConfig[category].label;
   return {
     title: `${categoryLabel} · #${tag}`,
     description: `${categoryLabel}分类中标签 #${tag} 的笔记。`,
@@ -47,12 +48,13 @@ export async function generateMetadata({ params }: CategoryTagNotesPageProps): P
 }
 
 export default async function CategoryTagNotesPage({ params }: CategoryTagNotesPageProps) {
-  if (!isNoteCategory(params.category)) {
+  const { category: rawCategory, tag: rawTag } = await params;
+  if (!isNoteCategory(rawCategory)) {
     notFound();
   }
 
-  const category = params.category as NoteCategory;
-  const tag = decodeTag(params.tag);
+  const category = rawCategory as NoteCategory;
+  const tag = decodeTag(rawTag);
   const [notes, tags] = await Promise.all([getAllNotes({ category, tag }), getAllNoteTags(category)]);
 
   if (!notes.length) {

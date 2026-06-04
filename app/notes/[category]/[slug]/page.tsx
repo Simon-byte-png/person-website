@@ -11,10 +11,10 @@ import { isNoteCategory, noteCategoryConfig, type NoteCategory } from "@/data/no
 export const dynamic = "force-dynamic";
 
 type NoteDetailPageProps = {
-  params: {
+  params: Promise<{
     category: string;
     slug: string;
-  };
+  }>;
 };
 
 function decodeSlug(value: string) {
@@ -34,10 +34,11 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: NoteDetailPageProps): Promise<Metadata> {
-  if (!isNoteCategory(params.category)) {
+  const { category, slug } = await params;
+  if (!isNoteCategory(category)) {
     return { title: "笔记不存在" };
   }
-  const note = await getNoteByCategoryAndSlug(params.category, decodeSlug(params.slug));
+  const note = await getNoteByCategoryAndSlug(category, decodeSlug(slug));
   if (!note) {
     return { title: "笔记不存在" };
   }
@@ -49,11 +50,12 @@ export async function generateMetadata({ params }: NoteDetailPageProps): Promise
 }
 
 export default async function NoteDetailPage({ params }: NoteDetailPageProps) {
-  if (!isNoteCategory(params.category)) {
+  const { category: rawCategory, slug } = await params;
+  if (!isNoteCategory(rawCategory)) {
     notFound();
   }
-  const category = params.category as NoteCategory;
-  const note = await getNoteByCategoryAndSlug(category, decodeSlug(params.slug));
+  const category = rawCategory as NoteCategory;
+  const note = await getNoteByCategoryAndSlug(category, decodeSlug(slug));
   if (!note) {
     notFound();
   }

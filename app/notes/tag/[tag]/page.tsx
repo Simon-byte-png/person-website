@@ -8,9 +8,9 @@ import { getAllNotes, getAllNoteTags } from "@/lib/posts";
 import { noteCategoryConfig, noteCategoryOrder } from "@/data/notes";
 
 type TagNotesPageProps = {
-  params: {
+  params: Promise<{
     tag: string;
-  };
+  }>;
 };
 
 function decodeTag(value: string) {
@@ -27,7 +27,8 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: TagNotesPageProps): Promise<Metadata> {
-  const tag = decodeTag(params.tag);
+  const { tag: rawTag } = await params;
+  const tag = decodeTag(rawTag);
   return {
     title: `#${tag} · 笔记`,
     description: `标签 #${tag} 下的笔记集合。`,
@@ -35,7 +36,8 @@ export async function generateMetadata({ params }: TagNotesPageProps): Promise<M
 }
 
 export default async function TagNotesPage({ params }: TagNotesPageProps) {
-  const tag = decodeTag(params.tag);
+  const { tag: rawTag } = await params;
+  const tag = decodeTag(rawTag);
   const [notes, allTags] = await Promise.all([getAllNotes({ tag }), getAllNoteTags()]);
 
   if (!notes.length) {
