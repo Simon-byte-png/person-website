@@ -3,7 +3,9 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Container } from "@/components/layout/container";
 import { TableOfContents } from "@/components/blog/table-of-contents";
+import { InteractionSection } from "@/components/interactions/interaction-section";
 import { Tag } from "@/components/ui/tag";
+import { ensureStaticInteractionPost } from "@/lib/blog/repository";
 import { getAllNotesParams, getNoteByCategoryAndSlug } from "@/lib/posts";
 import { formatDate } from "@/lib/utils";
 import { isNoteCategory, noteCategoryConfig, type NoteCategory } from "@/data/notes";
@@ -61,6 +63,14 @@ export default async function NoteDetailPage({ params }: NoteDetailPageProps) {
   }
 
   const categoryLabel = noteCategoryConfig[category].label;
+  const interactionPostId = await ensureStaticInteractionPost({
+    id: `note:${category}:${note.slug}`,
+    slug: `note-${category}-${note.slug}`,
+    title: note.title,
+    excerpt: note.excerpt,
+    content: note.content,
+    tags: note.tags,
+  });
 
   return (
     <section className="section-space">
@@ -91,6 +101,11 @@ export default async function NoteDetailPage({ params }: NoteDetailPageProps) {
         <aside className="space-y-6">
           <TableOfContents items={note.toc} />
         </aside>
+        {interactionPostId ? (
+          <div className="lg:col-span-2">
+            <InteractionSection postId={interactionPostId} />
+          </div>
+        ) : null}
       </Container>
     </section>
   );

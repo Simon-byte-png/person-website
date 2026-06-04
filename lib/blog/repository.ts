@@ -1,6 +1,6 @@
 import { and, count, desc, eq } from "drizzle-orm";
 import { getDb, hasDatabase } from "@/lib/db";
-import { comments, likes, posts, views } from "@/lib/db/schema";
+import { comments, likes, posts, users, views } from "@/lib/db/schema";
 import { calculateTrendingScore, matchesBlogSearch, validatePostInput, type PostInput } from "@/lib/blog/model";
 import { extractToc, getPostBySlug as getStaticPostBySlug, getReadingTime, renderMarkdown } from "@/lib/posts";
 
@@ -131,6 +131,67 @@ export async function createDatabasePost(input: PostInput, authorId: string) {
     .returning();
 
   return { ok: true as const, post: rowToBlogListItem(post) };
+}
+
+export async function ensureStaticInteractionPost(input: {
+  id: string;
+  slug: string;
+  title: string;
+  excerpt: string;
+  content: string;
+  tags: string[];
+}) {
+  if (!hasDatabase()) {
+    return null;
+  }
+
+  const now = new Date();
+  const db = getDb();
+  const systemUser = {
+    id: "system-static-content",
+    clerkUserId: "system:static-content",
+    email: "system@local.invalid",
+    username: "Samuel",
+    imageUrl: null,
+    updatedAt: now,
+  };
+
+  await db
+    .insert(users)
+    .values({
+      ...systemUser,
+      createdAt: now,
+    })
+    .onConflictDoUpdate({
+      target: users.clerkUserId,
+      set: systemUser,
+    });
+
+  const postValues = {
+    title: input.title,
+    slug: input.slug,
+    excerpt: input.excerpt,
+    content: input.content,
+    tags: input.tags,
+    authorId: systemUser.id,
+    published: false,
+    updatedAt: now,
+  };
+
+  const [post] = await db
+    .insert(posts)
+    .values({
+      id: input.id,
+      ...postValues,
+      createdAt: now,
+    })
+    .onConflictDoUpdate({
+      target: posts.id,
+      set: postValues,
+    })
+    .returning({ id: posts.id });
+
+  return post?.id ?? input.id;
 }
 
 export async function getPostStats(postId: string): Promise<PostStats> {
