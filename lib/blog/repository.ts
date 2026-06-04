@@ -1,4 +1,4 @@
-import { and, count, desc, eq } from "drizzle-orm";
+import { and, count, desc, eq, or } from "drizzle-orm";
 import { getDb, hasDatabase } from "@/lib/db";
 import { comments, likes, posts, users, views } from "@/lib/db/schema";
 import { calculateTrendingScore, matchesBlogSearch, validatePostInput, type PostInput } from "@/lib/blog/model";
@@ -178,20 +178,40 @@ export async function ensureStaticInteractionPost(input: {
     updatedAt: now,
   };
 
-  const [post] = await db
-    .insert(posts)
-    .values({
-      id: input.id,
-      ...postValues,
-      createdAt: now,
-    })
-    .onConflictDoUpdate({
-      target: posts.id,
-      set: postValues,
-    })
-    .returning({ id: posts.id });
+  const findExistingPost = async () => {
+    const [existing] = await db
+      .select({ id: posts.id })
+      .from(posts)
+      .where(or(eq(posts.id, input.id), eq(posts.slug, input.slug)))
+      .limit(1);
+    return existing ?? null;
+  };
 
-  return post?.id ?? input.id;
+  const existing = await findExistingPost();
+  if (existing) {
+    await db.update(posts).set(postValues).where(eq(posts.id, existing.id));
+    return existing.id;
+  }
+
+  try {
+    const [post] = await db
+      .insert(posts)
+      .values({
+        id: input.id,
+        ...postValues,
+        createdAt: now,
+      })
+      .returning({ id: posts.id });
+
+    return post?.id ?? input.id;
+  } catch (error) {
+    const racedPost = await findExistingPost();
+    if (racedPost) {
+      await db.update(posts).set(postValues).where(eq(posts.id, racedPost.id));
+      return racedPost.id;
+    }
+    throw error;
+  }
 }
 
 export async function getPostStats(postId: string): Promise<PostStats> {
