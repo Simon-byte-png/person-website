@@ -15,8 +15,7 @@ export const siteConfig = {
     { href: "/books", label: "读书" },
     { href: "/notes", label: "笔记" },
     { href: "/projects", label: "做过的事" },
-    { href: "/write", label: "写作入口" },
     { href: "/contact", label: "联系" },
   ] as NavigationItem[],
-  footerNote: "V1.0 使用阿里云 ECS + Docker + PostgreSQL + Clerk 部署，旧 GitHub Pages 地址仅保留静态站兼容。",
+  footerNote: "记录阅读、写作、实践与成长。",
 };

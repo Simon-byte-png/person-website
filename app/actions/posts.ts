@@ -16,7 +16,7 @@ export async function createPostAction(formData: FormData) {
       slug: String(formData.get("slug") ?? ""),
       excerpt: String(formData.get("excerpt") ?? ""),
       content: String(formData.get("content") ?? ""),
-      tags: String(formData.get("tags") ?? ""),
+      tags: "",
       published: formData.get("published") === "on",
     },
     adminResult.user.id,

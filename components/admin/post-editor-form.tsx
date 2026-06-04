@@ -82,10 +82,6 @@ export function PostEditorForm() {
           <textarea name="excerpt" required rows={3} className="w-full rounded-xl border border-[var(--border)] px-4 py-2 text-sm" />
         </label>
         <label className="space-y-2 block">
-          <span className="text-xs uppercase tracking-[0.12em] text-[var(--muted)]">标签（逗号分隔）</span>
-          <input name="tags" placeholder="AI, 写作, 产品" className="w-full rounded-xl border border-[var(--border)] px-4 py-2 text-sm" />
-        </label>
-        <label className="space-y-2 block">
           <span className="text-xs uppercase tracking-[0.12em] text-[var(--muted)]">正文 Markdown</span>
           <textarea
             name="content"

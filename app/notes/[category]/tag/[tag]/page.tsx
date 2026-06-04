@@ -3,9 +3,8 @@ import { notFound } from "next/navigation";
 import { PageHero } from "@/components/common/page-hero";
 import { Container } from "@/components/layout/container";
 import { NoteCard } from "@/components/notes/note-card";
-import { Tag } from "@/components/ui/tag";
 import { getAllNotes, getAllNoteTags } from "@/lib/posts";
-import { isNoteCategory, noteCategoryConfig, noteCategoryOrder, type NoteCategory } from "@/data/notes";
+import { isNoteCategory, noteCategoryOrder, type NoteCategory } from "@/data/notes";
 
 type CategoryTagNotesPageProps = {
   params: Promise<{
@@ -34,16 +33,14 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: CategoryTagNotesPageProps): Promise<Metadata> {
-  const { category, tag: rawTag } = await params;
+  const { category } = await params;
   if (!isNoteCategory(category)) {
-    return { title: "分类不存在" };
+    return { title: "笔记不存在" };
   }
 
-  const tag = decodeTag(rawTag);
-  const categoryLabel = noteCategoryConfig[category].label;
   return {
-    title: `${categoryLabel} · #${tag}`,
-    description: `${categoryLabel}分类中标签 #${tag} 的笔记。`,
+    title: "笔记",
+    description: "个人笔记集合。",
   };
 }
 
@@ -55,7 +52,7 @@ export default async function CategoryTagNotesPage({ params }: CategoryTagNotesP
 
   const category = rawCategory as NoteCategory;
   const tag = decodeTag(rawTag);
-  const [notes, tags] = await Promise.all([getAllNotes({ category, tag }), getAllNoteTags(category)]);
+  const notes = await getAllNotes({ category, tag });
 
   if (!notes.length) {
     notFound();
@@ -65,41 +62,11 @@ export default async function CategoryTagNotesPage({ params }: CategoryTagNotesP
     <>
       <PageHero
         eyebrow="Notes"
-        title={`${noteCategoryConfig[category].label} · #${tag}`}
-        description="分类与标签的交叉筛选结果。"
+        title="笔记"
+        description="这里保留旧链接兼容，内容仍回到统一的笔记阅读体验。"
       />
       <section className="section-space pt-4">
         <Container className="space-y-8">
-          <div className="surface-card p-5">
-            <p className="mb-3 text-xs uppercase tracking-[0.16em] text-[var(--muted)]">分类</p>
-            <div className="flex flex-wrap gap-2">
-              <Tag label="全部" href="/notes" />
-              {noteCategoryOrder.map((item) => (
-                <Tag
-                  key={item}
-                  label={noteCategoryConfig[item].label}
-                  href={`/notes/${item}`}
-                  active={item === category}
-                />
-              ))}
-            </div>
-          </div>
-
-          <div className="surface-card p-5">
-            <p className="mb-3 text-xs uppercase tracking-[0.16em] text-[var(--muted)]">标签</p>
-            <div className="flex flex-wrap gap-2">
-              <Tag label="全部标签" href={`/notes/${category}`} />
-              {tags.map((item) => (
-                <Tag
-                  key={item}
-                  label={item}
-                  href={`/notes/${category}/tag/${encodeURIComponent(item)}`}
-                  active={item === tag}
-                />
-              ))}
-            </div>
-          </div>
-
           <div className="grid gap-5">
             {notes.map((note) => (
               <NoteCard key={note.id} note={note} />

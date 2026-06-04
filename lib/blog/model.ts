@@ -9,13 +9,6 @@ export type PostInput = {
   published: boolean;
 };
 
-export type SearchableBlogPost = {
-  title: string;
-  excerpt: string;
-  content: string;
-  tags: string[];
-};
-
 export function normalizeTags(value: string | string[]) {
   const items = Array.isArray(value) ? value : value.split(",");
   return Array.from(new Set(items.map((item) => item.trim()).filter(Boolean)));
@@ -64,16 +57,6 @@ export function validatePostInput(input: PostInput) {
       published: input.published,
     },
   };
-}
-
-export function matchesBlogSearch(post: SearchableBlogPost, query: string) {
-  const normalizedQuery = query.trim().toLowerCase();
-  if (!normalizedQuery) {
-    return true;
-  }
-
-  const haystack = [post.title, post.excerpt, post.content, ...post.tags].join("\n").toLowerCase();
-  return haystack.includes(normalizedQuery);
 }
 
 export function calculateTrendingScore({

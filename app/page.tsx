@@ -7,7 +7,6 @@ import { currentBooks, heartNotes } from "@/data/life";
 import { profile } from "@/data/profile";
 import { projects } from "@/data/projects";
 import { getAllNotes } from "@/lib/posts";
-import { noteCategoryConfig } from "@/data/notes";
 import { NoteCard } from "@/components/notes/note-card";
 
 export const metadata: Metadata = {
@@ -41,17 +40,6 @@ export default async function HomePage() {
               <div className="flex flex-wrap items-center gap-3 pt-1">
                 <ButtonLink href="/notes" label="进入笔记" />
                 <ButtonLink href="/books" label="正在读什么" variant="secondary" />
-                <ButtonLink href="/write" label="快速导入文字" variant="ghost" />
-              </div>
-              <div className="flex flex-wrap gap-2 pt-2">
-                {Object.entries(noteCategoryConfig).map(([key, value]) => (
-                  <span
-                    key={key}
-                    className="rounded-full border border-[var(--border)] bg-[var(--surface)]/80 px-3 py-1 text-xs text-[var(--muted)]"
-                  >
-                    {value.label}
-                  </span>
-                ))}
               </div>
             </div>
           </div>

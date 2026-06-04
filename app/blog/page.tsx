@@ -2,15 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { PageHero } from "@/components/common/page-hero";
 import { Container } from "@/components/layout/container";
-import { Tag } from "@/components/ui/tag";
 import { getPublishedPosts, getTrendingPosts } from "@/lib/blog/repository";
 import { formatDate } from "@/lib/utils";
-
-type BlogPageProps = {
-  searchParams?: Promise<{
-    q?: string;
-  }>;
-};
 
 export const dynamic = "force-dynamic";
 
@@ -19,33 +12,18 @@ export const metadata: Metadata = {
   description: "数据库驱动的个人博客。",
 };
 
-export default async function BlogPage({ searchParams }: BlogPageProps) {
-  const params = await searchParams;
-  const query = params?.q?.trim() ?? "";
-  const [posts, trendingPosts] = await Promise.all([getPublishedPosts(query), getTrendingPosts(5)]);
+export default async function BlogPage() {
+  const [posts, trendingPosts] = await Promise.all([getPublishedPosts(), getTrendingPosts(5)]);
 
   return (
     <>
-      <PageHero eyebrow="Blog" title="博客" description="V1.0 博客文章从 PostgreSQL 数据库读取，支持搜索、评论、点赞和热榜。" />
+      <PageHero eyebrow="Blog" title="博客" description="这里放正式整理后的文章，也保留评论、点赞和热门文章。" />
       <section className="section-space pt-4">
         <Container className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_300px] lg:items-start">
           <div className="space-y-6">
-            <form action="/blog" className="surface-card flex flex-col gap-3 p-4 sm:flex-row">
-              <input
-                type="search"
-                name="q"
-                defaultValue={query}
-                placeholder="搜索标题、摘要、正文、标签"
-                className="min-w-0 flex-1 rounded-xl border border-[var(--border)] bg-[var(--surface)] px-4 py-2 text-sm text-[var(--ink)] outline-none focus:border-[var(--accent)]"
-              />
-              <button type="submit" className="rounded-full bg-[var(--ink)] px-5 py-2 text-sm text-white">
-                搜索
-              </button>
-            </form>
-
             {posts.length === 0 ? (
               <div className="surface-card p-8 text-sm text-[var(--muted)]">
-                {query ? "没有找到匹配的数据库博客。" : "暂无数据库博客。管理员可以在 /admin/posts/new 新建文章。"}
+                暂无博客。管理员可以在个人中心进入新建博客。
               </div>
             ) : (
               <div className="grid gap-5">
@@ -65,11 +43,6 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
                       </Link>
                     </h2>
                     <p className="mt-3 text-[15px] leading-relaxed text-[var(--muted)]">{post.excerpt}</p>
-                    <div className="mt-5 flex flex-wrap gap-2">
-                      {post.tags.map((tag) => (
-                        <Tag key={tag} label={tag} href={`/blog?q=${encodeURIComponent(tag)}`} />
-                      ))}
-                    </div>
                   </article>
                 ))}
               </div>

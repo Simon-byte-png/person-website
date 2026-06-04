@@ -10,11 +10,11 @@ export const metadata: Metadata = {
 };
 
 const contactLinks = [
-  { label: "邮箱", href: `mailto:${profile.email}` },
+  profile.email ? { label: "邮箱", href: `mailto:${profile.email}` } : null,
   { label: "GitHub", href: profile.social.github },
   { label: "X / Twitter", href: profile.social.twitter },
   { label: "LinkedIn", href: profile.social.linkedin },
-].filter((item) => item.href);
+].filter((item): item is { label: string; href: string } => Boolean(item?.href));
 
 export default function ContactPage() {
   return (

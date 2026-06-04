@@ -15,7 +15,7 @@ export const profile = {
   shortBio:
     "这是我的个人田野笔记本：记录阅读、写作、实践与成长。少一点口号，多一点真实。",
   location: "Hangzhou, China",
-  email: "3076986920@qq.com",
+  email: "",
   avatar: "/avatar-placeholder.svg",
   social: {
     github: "https://github.com/Simon-byte-png",

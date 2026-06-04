@@ -4,11 +4,10 @@ import { notFound } from "next/navigation";
 import { Container } from "@/components/layout/container";
 import { TableOfContents } from "@/components/blog/table-of-contents";
 import { InteractionSection } from "@/components/interactions/interaction-section";
-import { Tag } from "@/components/ui/tag";
 import { ensureStaticInteractionPost } from "@/lib/blog/repository";
 import { getAllNotesParams, getNoteByCategoryAndSlug } from "@/lib/posts";
 import { formatDate } from "@/lib/utils";
-import { isNoteCategory, noteCategoryConfig, type NoteCategory } from "@/data/notes";
+import { isNoteCategory, type NoteCategory } from "@/data/notes";
 
 export const dynamic = "force-dynamic";
 
@@ -62,7 +61,6 @@ export default async function NoteDetailPage({ params }: NoteDetailPageProps) {
     notFound();
   }
 
-  const categoryLabel = noteCategoryConfig[category].label;
   const interactionPostId = await ensureStaticInteractionPost({
     id: `note:${category}:${note.slug}`,
     slug: `note-${category}-${note.slug}`,
@@ -78,22 +76,14 @@ export default async function NoteDetailPage({ params }: NoteDetailPageProps) {
         <article className="surface-card p-7 md:p-10">
           <header className="mb-10 border-b border-[var(--border)] pb-7">
             <div className="mb-4 flex flex-wrap items-center gap-2 text-xs text-[var(--muted)]">
-              <span className="rounded-full bg-[var(--accent-soft)] px-2.5 py-1 text-[11px] text-[var(--accent)]">
-                {categoryLabel}
-              </span>
               <time dateTime={note.date}>{formatDate(note.date)}</time>
               <span>·</span>
               <span>{note.readingTime} 分钟</span>
             </div>
             <h1 className="font-display text-4xl leading-tight text-[var(--ink)] md:text-6xl">{note.title}</h1>
             <p className="mt-4 text-base leading-relaxed text-[var(--muted)] md:text-lg">{note.excerpt}</p>
-            <div className="mt-5 flex flex-wrap gap-2">
-              {note.tags.map((tag) => (
-                <Tag key={tag} label={tag} href={`/notes/${category}/tag/${encodeURIComponent(tag)}`} />
-              ))}
-            </div>
-            <Link href={`/notes/${category}`} className="mt-6 inline-block text-sm text-[var(--muted)] hover:text-[var(--ink)]">
-              返回 {categoryLabel}
+            <Link href="/notes" className="mt-6 inline-block text-sm text-[var(--muted)] hover:text-[var(--ink)]">
+              返回笔记
             </Link>
           </header>
           <div className="markdown" dangerouslySetInnerHTML={{ __html: note.html }} />

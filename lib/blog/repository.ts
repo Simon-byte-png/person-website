@@ -1,7 +1,7 @@
 import { and, count, desc, eq, or } from "drizzle-orm";
 import { getDb, hasDatabase } from "@/lib/db";
 import { comments, likes, posts, users, views } from "@/lib/db/schema";
-import { calculateTrendingScore, matchesBlogSearch, validatePostInput, type PostInput } from "@/lib/blog/model";
+import { calculateTrendingScore, validatePostInput, type PostInput } from "@/lib/blog/model";
 import { extractToc, getPostBySlug as getStaticPostBySlug, getReadingTime, renderMarkdown } from "@/lib/posts";
 
 export type BlogListItem = {
@@ -52,15 +52,14 @@ function rowToBlogListItem(row: typeof posts.$inferSelect): BlogListItem {
   };
 }
 
-export async function getPublishedPosts(query = "") {
+export async function getPublishedPosts() {
   if (!hasDatabase()) {
     return [] as BlogListItem[];
   }
 
   const db = getDb();
   const rows = await db.select().from(posts).where(eq(posts.published, true)).orderBy(desc(posts.createdAt));
-  const items = rows.map(rowToBlogListItem);
-  return items.filter((post) => matchesBlogSearch(post, query));
+  return rows.map(rowToBlogListItem);
 }
 
 export async function getDatabasePostBySlug(slug: string) {

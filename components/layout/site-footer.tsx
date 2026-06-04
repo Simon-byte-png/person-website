@@ -19,9 +19,11 @@ export function SiteFooter() {
           <p className="max-w-2xl text-sm text-[var(--muted)]">{siteConfig.footerNote}</p>
         </div>
         <div className="space-y-2 text-sm">
-          <a className="block text-[var(--ink)] hover:text-[var(--accent)]" href={`mailto:${profile.email}`}>
-            {profile.email}
-          </a>
+          {profile.email ? (
+            <a className="block text-[var(--ink)] hover:text-[var(--accent)]" href={`mailto:${profile.email}`}>
+              {profile.email}
+            </a>
+          ) : null}
           <div className="flex gap-4">
             {socialLinks.map((link) => (
               <Link

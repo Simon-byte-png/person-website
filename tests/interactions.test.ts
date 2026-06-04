@@ -7,12 +7,7 @@ import {
   type FlatComment,
 } from "../lib/interactions/model";
 import { parseAdminEmails, isAdminEmail } from "../lib/admin";
-import {
-  calculateTrendingScore,
-  matchesBlogSearch,
-  normalizeTags,
-  validatePostInput,
-} from "../lib/blog/model";
+import { calculateTrendingScore, normalizeTags, validatePostInput } from "../lib/blog/model";
 
 describe("admin email helpers", () => {
   it("parses comma-separated admin emails case-insensitively", () => {
@@ -98,7 +93,7 @@ describe("buildCommentTree", () => {
   });
 });
 
-describe("post validation and search", () => {
+describe("post validation", () => {
   it("validates slug and normalizes tags", () => {
     expect(normalizeTags("AI, 产品,AI,, writing")).toEqual(["AI", "产品", "writing"]);
     expect(
@@ -107,7 +102,7 @@ describe("post validation and search", () => {
         slug: "first-post",
         excerpt: "摘要",
         content: "正文",
-        tags: "AI, 产品",
+        tags: "",
         published: true,
       }),
     ).toEqual({
@@ -117,7 +112,7 @@ describe("post validation and search", () => {
         slug: "first-post",
         excerpt: "摘要",
         content: "正文",
-        tags: ["AI", "产品"],
+        tags: [],
         published: true,
       },
     });
@@ -131,20 +126,6 @@ describe("post validation and search", () => {
         published: true,
       }),
     ).toEqual({ ok: false, error: "slug 只能包含小写字母、数字和短横线" });
-  });
-
-  it("matches search across title excerpt content and tags", () => {
-    const post = {
-      title: "AI 产品笔记",
-      excerpt: "关于可信度",
-      content: "长期主义不是口号",
-      tags: ["写作", "产品"],
-    };
-
-    expect(matchesBlogSearch(post, "可信度")).toBe(true);
-    expect(matchesBlogSearch(post, "长期主义")).toBe(true);
-    expect(matchesBlogSearch(post, "写作")).toBe(true);
-    expect(matchesBlogSearch(post, "不存在")).toBe(false);
   });
 });
 

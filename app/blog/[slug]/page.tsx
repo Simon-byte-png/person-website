@@ -4,7 +4,6 @@ import { notFound } from "next/navigation";
 import { Container } from "@/components/layout/container";
 import { TableOfContents } from "@/components/blog/table-of-contents";
 import { InteractionSection } from "@/components/interactions/interaction-section";
-import { Tag } from "@/components/ui/tag";
 import { getBlogPostBySlug, recordPostView } from "@/lib/blog/repository";
 import { formatDate } from "@/lib/utils";
 
@@ -63,11 +62,6 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
             </div>
             <h1 className="font-display text-4xl leading-tight text-[var(--ink)] md:text-6xl">{post.title}</h1>
             <p className="mt-4 text-base leading-relaxed text-[var(--muted)] md:text-lg">{post.excerpt}</p>
-            <div className="mt-5 flex flex-wrap gap-2">
-              {post.tags.map((tag) => (
-                <Tag key={tag} label={tag} href={`/blog?q=${encodeURIComponent(tag)}`} />
-              ))}
-            </div>
           </header>
           <div className="markdown" dangerouslySetInnerHTML={{ __html: post.html }} />
         </article>
