@@ -11,8 +11,8 @@ export function Tag({ label, href, active = false }: TagProps) {
   const className = cn(
     "inline-flex rounded-full border px-3 py-1 text-xs transition-colors",
     active
-      ? "border-transparent bg-[var(--accent)] text-white"
-      : "border-[var(--border)] bg-[var(--surface)] text-[var(--muted)] hover:text-[var(--ink)]",
+      ? "border-transparent bg-[var(--accent)] text-white shadow-[0_5px_14px_rgba(215,96,59,0.2)]"
+      : "border-[var(--border)] bg-[var(--surface)] text-[var(--muted)] hover:border-[var(--accent)] hover:text-[var(--accent-deep)]",
   );
 
   if (!href) {
@@ -25,4 +25,3 @@ export function Tag({ label, href, active = false }: TagProps) {
     </Link>
   );
 }
-

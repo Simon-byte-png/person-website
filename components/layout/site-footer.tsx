@@ -8,32 +8,22 @@ const socialLinks = [
   { label: "GitHub", href: profile.social.github },
   { label: "X", href: profile.social.twitter },
   { label: "LinkedIn", href: profile.social.linkedin },
-];
+].filter((link) => isExternalUrl(link.href));
 
 export function SiteFooter() {
   return (
-    <footer className="border-t border-[var(--border)] bg-[var(--surface)]/75 py-10">
-      <Container className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+    <footer className="border-t border-[var(--border)] bg-[var(--surface)]/75 py-12">
+      <Container className="flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
         <div className="space-y-2">
-          <p className="font-display text-xl text-[var(--ink)]">{profile.name}</p>
+          <p className="brand-name text-[var(--ink)]">{profile.name}</p>
           <p className="max-w-2xl text-sm text-[var(--muted)]">{siteConfig.footerNote}</p>
         </div>
-        <div className="space-y-2 text-sm">
-          <a className="block text-[var(--ink)] hover:text-[var(--accent)]" href={`mailto:${profile.email}`}>
+        <div className="space-y-3 text-sm md:text-right">
+          <a className="block text-[var(--ink)] transition-colors hover:text-[var(--accent-deep)]" href={`mailto:${profile.email}`}>
             {profile.email}
           </a>
-          <div className="flex gap-4">
-            {socialLinks.map((link) => {
-              const isExternal = isExternalUrl(link.href);
-              if (!isExternal) {
-                return (
-                  <span key={link.label} className="text-[var(--muted)]">
-                    {link.label} 待补充
-                  </span>
-                );
-              }
-
-              return (
+          <div className="flex gap-4 md:justify-end">
+            {socialLinks.map((link) => (
                 <Link
                   key={link.label}
                   href={link.href}
@@ -43,8 +33,7 @@ export function SiteFooter() {
                 >
                   {link.label}
                 </Link>
-              );
-            })}
+              ))}
           </div>
         </div>
       </Container>

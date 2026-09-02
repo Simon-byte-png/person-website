@@ -16,9 +16,12 @@ export function NavLink({ href, label }: NavLinkProps) {
   return (
     <Link
       href={href}
+      aria-current={isActive ? "page" : undefined}
       className={cn(
-        "rounded-full px-3 py-1.5 text-sm tracking-tight transition-colors duration-300",
-        isActive ? "bg-[var(--accent-soft)] text-[var(--accent)]" : "text-[var(--muted)] hover:text-[var(--ink)]",
+        "relative rounded-full px-3 py-1.5 text-sm tracking-tight transition-all duration-300",
+        isActive
+          ? "bg-[var(--accent-soft)] font-medium text-[var(--accent-deep)] shadow-[inset_0_0_0_1px_rgba(215,96,59,0.12)]"
+          : "text-[var(--muted)] hover:bg-[var(--surface-soft)] hover:text-[var(--ink)]",
       )}
     >
       {label}

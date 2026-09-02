@@ -15,7 +15,7 @@ const contactLinks = [
   { label: "GitHub", href: profile.social.github },
   { label: "X / Twitter", href: profile.social.twitter },
   { label: "LinkedIn", href: profile.social.linkedin },
-];
+].filter((item) => item.href.startsWith("mailto:") || isExternalUrl(item.href));
 
 export default function ContactPage() {
   return (
@@ -27,7 +27,8 @@ export default function ContactPage() {
       />
       <section className="section-space pt-4">
         <Container>
-          <div className="surface-card max-w-3xl p-7">
+          <div className="surface-card feature-card max-w-3xl p-7 md:p-8">
+            <p className="card-index">A quiet hello</p>
             <ul className="space-y-5">
               {contactLinks.map((item) => (
                 <li key={item.label} className="flex flex-wrap items-center justify-between gap-3 border-b border-[var(--border)] pb-5 last:border-b-0 last:pb-0">
@@ -37,7 +38,7 @@ export default function ContactPage() {
                       href={item.href}
                       target={item.href.startsWith("mailto:") ? undefined : "_blank"}
                       rel={item.href.startsWith("mailto:") ? undefined : "noopener noreferrer"}
-                      className="text-sm text-[var(--ink)] transition-colors hover:text-[var(--accent)]"
+                      className="text-sm text-[var(--ink)] transition-colors hover:text-[var(--accent-deep)]"
                     >
                       {item.href}
                     </Link>
@@ -53,4 +54,3 @@ export default function ContactPage() {
     </>
   );
 }
-

@@ -106,7 +106,7 @@ export function QuickEntryForm() {
           <select
             value={type}
             onChange={(event) => setType(event.target.value as EntryType)}
-            className="w-full rounded-xl border border-[var(--border)] bg-[var(--surface)] px-3 py-2 text-sm text-[var(--ink)]"
+            className="form-field w-full rounded-xl border border-[var(--border)] bg-[var(--surface)] px-3 py-2 text-sm text-[var(--ink)]"
           >
             {entryTypeOptions.map((option) => (
               <option key={option.value} value={option.value}>
@@ -122,7 +122,7 @@ export function QuickEntryForm() {
             type="date"
             value={date}
             onChange={(event) => setDate(event.target.value)}
-            className="w-full rounded-xl border border-[var(--border)] bg-[var(--surface)] px-3 py-2 text-sm text-[var(--ink)]"
+            className="form-field w-full rounded-xl border border-[var(--border)] bg-[var(--surface)] px-3 py-2 text-sm text-[var(--ink)]"
           />
         </label>
       </div>
@@ -133,7 +133,7 @@ export function QuickEntryForm() {
           <select
             value={category}
             onChange={(event) => setCategory(event.target.value as NoteCategory)}
-            className="w-full rounded-xl border border-[var(--border)] bg-[var(--surface)] px-3 py-2 text-sm text-[var(--ink)]"
+            className="form-field w-full rounded-xl border border-[var(--border)] bg-[var(--surface)] px-3 py-2 text-sm text-[var(--ink)]"
           >
             {noteCategoryOrder.map((item) => (
               <option key={item} value={item}>
@@ -173,7 +173,7 @@ export function QuickEntryForm() {
           onChange={(event) => setBody(event.target.value)}
           rows={12}
           placeholder="把你的文字粘贴在这里..."
-          className="w-full rounded-xl border border-[var(--border)] bg-[var(--surface)] px-3 py-2 text-sm leading-relaxed text-[var(--ink)]"
+          className="form-field w-full rounded-xl border border-[var(--border)] bg-[var(--surface)] px-3 py-2 text-sm leading-relaxed text-[var(--ink)]"
         />
       </label>
 
@@ -186,14 +186,14 @@ export function QuickEntryForm() {
         <button
           type="button"
           onClick={copyMarkdown}
-          className="rounded-full bg-[var(--ink)] px-5 py-2.5 text-sm text-white transition-colors hover:bg-black"
+          className="rounded-full bg-[var(--ink)] px-5 py-2.5 text-sm font-medium text-white transition-all hover:-translate-y-0.5 hover:bg-[var(--accent-deep)]"
         >
           {copied ? "已复制" : "复制 Markdown"}
         </button>
         <button
           type="button"
           onClick={downloadMarkdown}
-          className="rounded-full border border-[var(--border)] bg-[var(--surface)] px-5 py-2.5 text-sm text-[var(--ink)] hover:border-[var(--ink)]"
+          className="rounded-full border border-[var(--border)] bg-[var(--surface)] px-5 py-2.5 text-sm text-[var(--ink)] transition-all hover:-translate-y-0.5 hover:border-[var(--accent)] hover:text-[var(--accent-deep)]"
         >
           下载 .md 文件
         </button>
@@ -208,4 +208,3 @@ export function QuickEntryForm() {
     </div>
   );
 }
-

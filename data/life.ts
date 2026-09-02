@@ -22,7 +22,7 @@ export const readingPhilosophy =
 export const currentBooks: BookItem[] = [
   {
     title: "九诗心",
-    author: "[TO_FILL] Author",
+    author: "作者待补充",
     progress: "阅读中",
     note: "这本书给我的提醒是：技术越快，人的真实感越珍贵。",
   },

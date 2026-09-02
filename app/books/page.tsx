@@ -18,14 +18,18 @@ export default function BooksPage() {
       />
       <section className="section-space pt-4">
         <Container className="space-y-7">
-          <article className="surface-card border-l-4 border-l-[var(--accent)] p-7">
+          <article className="surface-card feature-card border-l-4 border-l-[var(--accent)] p-7 md:p-8">
+            <p className="card-index">A reading practice</p>
             <p className="text-sm leading-relaxed text-[var(--ink)]">{readingPhilosophy}</p>
           </article>
           <div className="grid gap-5 md:grid-cols-2">
-            {currentBooks.map((book) => (
-              <article key={`${book.title}-${book.author}`} className="surface-card p-7">
-                <p className="text-xs uppercase tracking-[0.12em] text-[var(--muted)]">{book.progress}</p>
-                <h2 className="mt-2 font-display text-3xl text-[var(--ink)]">{book.title}</h2>
+            {currentBooks.map((book, index) => (
+              <article key={`${book.title}-${book.author}`} className="project-card p-7">
+                <div className="flex items-center justify-between gap-3">
+                  <p className="card-index">0{index + 1}</p>
+                  <p className="status-badge">{book.progress}</p>
+                </div>
+                <h2 className="mt-5 font-display text-3xl text-[var(--ink)]">{book.title}</h2>
                 <p className="mt-2 text-sm text-[var(--muted)]">{book.author}</p>
                 <p className="mt-4 text-sm leading-relaxed text-[var(--ink)]">{book.note}</p>
               </article>
@@ -36,4 +40,3 @@ export default function BooksPage() {
     </>
   );
 }
-

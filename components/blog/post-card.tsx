@@ -9,10 +9,10 @@ type PostCardProps = {
 
 export function PostCard({ post }: PostCardProps) {
   return (
-    <article className="group rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-6 transition-all duration-300 hover:-translate-y-1 hover:border-[var(--ink)]/30">
+    <article className="post-card group p-6 md:p-7">
       <div className="mb-4 flex flex-wrap items-center gap-2 text-xs text-[var(--muted)]">
         <time dateTime={post.date}>{formatDate(post.date)}</time>
-        <span>·</span>
+        <span className="text-[var(--border)]">/</span>
         <span>{post.readingTime} 分钟</span>
       </div>
       <h3 className="font-display text-2xl leading-snug text-[var(--ink)]">

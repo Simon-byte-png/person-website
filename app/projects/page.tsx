@@ -21,24 +21,27 @@ export default function ProjectsPage() {
       <section className="section-space pt-4">
         <Container>
           <div className="grid gap-5 md:grid-cols-2">
-            {projects.map((project) => (
-              <article key={project.id} className="surface-card p-7">
+            {projects.map((project, index) => (
+              <article key={project.id} className="project-card p-7">
                 <div className="flex items-center justify-between gap-3">
-                  <p className="text-xs uppercase tracking-[0.14em] text-[var(--muted)]">{project.status}</p>
-                  {isExternalUrl(project.href) ? (
-                    <Link
-                      href={project.href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-xs text-[var(--muted)] transition-colors hover:text-[var(--ink)]"
-                    >
-                      打开链接
-                    </Link>
-                  ) : (
-                    <span className="text-xs text-[var(--muted)]">链接待补充</span>
-                  )}
+                  <p className="card-index">0{index + 1}</p>
+                  <div className="flex items-center gap-4">
+                    <span className="status-badge" data-status={project.status.toLowerCase()}>
+                      {project.status === "Completed" ? "已完成" : "进行中"}
+                    </span>
+                    {isExternalUrl(project.href) ? (
+                      <Link
+                        href={project.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-xs text-[var(--muted)] transition-colors hover:text-[var(--accent-deep)]"
+                      >
+                        打开链接 ↗
+                      </Link>
+                    ) : null}
+                  </div>
                 </div>
-                <h2 className="mt-2 font-display text-3xl text-[var(--ink)]">{project.name}</h2>
+                <h2 className="mt-5 font-display text-3xl text-[var(--ink)]">{project.name}</h2>
                 <p className="mt-3 text-sm leading-relaxed text-[var(--muted)]">{project.summary}</p>
                 <div className="mt-5 flex flex-wrap gap-2">
                   {project.stack.map((tech) => (
@@ -55,4 +58,3 @@ export default function ProjectsPage() {
     </>
   );
 }
-

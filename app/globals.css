@@ -6,6 +6,7 @@
 @tailwind utilities;
 
 * {
+  box-sizing: border-box;
   border-color: var(--border);
 }
 
@@ -32,28 +33,33 @@ pre {
 }
 
 ::selection {
-  background: rgba(66, 92, 173, 0.16);
-  color: #0f172a;
+  background: rgba(215, 96, 59, 0.2);
+  color: var(--ink);
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
 }
 
 @layer utilities {
   .section-space {
-    padding-top: 3.5rem;
-    padding-bottom: 3.5rem;
+    padding-top: 4rem;
+    padding-bottom: 4rem;
   }
 
   @media (min-width: 768px) {
     .section-space {
-      padding-top: 5rem;
-      padding-bottom: 5rem;
+      padding-top: 6rem;
+      padding-bottom: 6rem;
     }
   }
 
   .surface-card {
-    border-radius: 1rem;
+    border-radius: 1.35rem;
     border: 1px solid var(--border);
-    background: var(--surface);
-    box-shadow: 0 16px 36px rgba(18, 20, 36, 0.03);
+    background: rgba(255, 255, 250, 0.86);
+    box-shadow: 0 12px 32px rgba(40, 51, 46, 0.055);
   }
 
   .fade-up {
@@ -61,9 +67,9 @@ pre {
   }
 
   .magazine-grid {
-    background-image: linear-gradient(to right, rgba(122, 128, 143, 0.1) 1px, transparent 1px),
-      linear-gradient(to bottom, rgba(122, 128, 143, 0.1) 1px, transparent 1px);
-    background-size: 32px 32px;
+    background-image: linear-gradient(to right, rgba(63, 83, 74, 0.1) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(63, 83, 74, 0.1) 1px, transparent 1px);
+    background-size: 36px 36px;
   }
 }
 
@@ -79,3 +85,16 @@ pre {
   }
 }
 
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

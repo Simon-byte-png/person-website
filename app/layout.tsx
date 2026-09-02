@@ -54,7 +54,7 @@ export default function RootLayout({
     <html lang={siteConfig.locale} suppressHydrationWarning>
       <body className={`${sans.variable} ${serif.variable} ${mono.variable} bg-[var(--bg)] text-[var(--ink)]`}>
         <div className="site-shell relative min-h-screen">
-          <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(circle_at_top_left,rgba(66,92,173,0.08),transparent_45%),radial-gradient(circle_at_bottom_right,rgba(30,36,58,0.06),transparent_38%)]" />
+          <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(circle_at_top_left,rgba(215,96,59,0.10),transparent_45%),radial-gradient(circle_at_bottom_right,rgba(54,119,109,0.08),transparent_38%)]" />
           <SiteHeader />
           <main>{children}</main>
           <SiteFooter />
